@@ -1,30 +1,9 @@
-package main
+package skiplist
 
 import (
-	"fmt"
 	"math"
-	"sync"
 	"time"
-
-	"golang.org/x/exp/rand"
 )
-
-const (
-	defaultMaxHeight   uint32  = 12
-	defaultProbability float64 = 1 / math.E
-)
-
-// SkipList is a concurrent skiplist
-type SkipList struct {
-	maxHeight   uint32
-	probability float64
-	probTable   []uint32
-
-	rand struct {
-		sync.Mutex
-		src rand.PCGSource
-	}
-}
 
 // generateRandomHeight generate level for new Node
 func (s *SkipList) generateRandomHeight() uint32 {
@@ -70,13 +49,4 @@ func New(maxHeight uint32, probability float64) *SkipList {
 	}
 	skl.rand.src.Seed(uint64(time.Now().UnixNano()))
 	return skl
-}
-
-func main() {
-	s := NewWithDefault()
-	var levelDistribution [defaultMaxHeight + 1]int32
-	for i := 0; i < 10000000; i++ {
-		levelDistribution[s.generateRandomHeight()]++
-	}
-	fmt.Println(levelDistribution)
 }
