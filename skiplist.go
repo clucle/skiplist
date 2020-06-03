@@ -5,6 +5,35 @@ import (
 	"time"
 )
 
+// Set updates the value that matches the key you already have
+// When key is missing, occur error
+func (s *SkipList) Set(key float64, value interface{}) {
+	update := s.getPrev(key)
+	if update[0].next[0].Key() == key {
+		update[0].next[0].value = value
+	} else {
+
+	}
+}
+
+// getPrev is the search previous node
+func (s *SkipList) getPrev(key float64) []*Node {
+	var prev *Node = &s.Node
+	var next *Element
+
+	var update = []*Node{}
+
+	for i := s.maxHeight - 1; i >= 0; i-- {
+		next = prev.next[0]
+		for next != nil && key > next.key {
+			prev = &next.Node
+			next = next.next[i]
+		}
+		update[i] = prev
+	}
+	return update
+}
+
 // generateRandomHeight generate level for new Node
 func (s *SkipList) generateRandomHeight() uint32 {
 	s.rand.Lock()
