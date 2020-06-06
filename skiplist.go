@@ -7,13 +7,29 @@ import (
 
 // Set updates the value that matches the key you already have
 // When key is missing, occur error
-func (s *SkipList) Set(key float64, value interface{}) {
+func (s *SkipList) Set(key float64, value interface{}) *Element {
 	update := s.getPrev(key)
-	if update[0].next[0].Key() == key {
-		update[0].next[0].value = value
-	} else {
 
+	var element *Element
+
+	if element = update[0].next[0]; element != nil && element.key == key {
+		element.value = value
+		return element
 	}
+
+	element = &Element{
+		Node: Node{
+			next: make([]*Element, s.generateRandomHeight()),
+		},
+		key:   key,
+		value: value,
+	}
+
+	for i := range element.next {
+		element.next[i] = update[i].next[i]
+		update[i].next[i] = element
+	}
+	return element
 }
 
 // getPrev is the search previous node
