@@ -32,6 +32,26 @@ func (s *SkipList) Set(key float64, value interface{}) *Element {
 	return element
 }
 
+// Find get skiplist node when has same key
+func (s *SkipList) Find(key float64) *Element {
+	var prev *Node = &s.Node
+	var next *Element
+
+	for i := s.maxHeight - 1; i >= 0; i-- {
+		next = prev.next[0]
+		for next != nil && key > next.key {
+			prev = &next.Node
+			next = next.next[i]
+		}
+	}
+
+	if next != nil && next.key == key {
+		return next
+	}
+
+	return nil
+}
+
 // getPrev is the search previous node
 func (s *SkipList) getPrev(key float64) []*Node {
 	var prev *Node = &s.Node
