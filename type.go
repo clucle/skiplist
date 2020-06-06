@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	defaultMaxHeight   uint32  = 12
+	defaultMaxHeight   int32   = 12
 	defaultProbability float64 = 1 / math.E
 )
 
@@ -32,7 +32,7 @@ func (e *Element) Key() float64 {
 // SkipList is a concurrent skiplist
 type SkipList struct {
 	Node
-	maxHeight   uint32
+	maxHeight   int32
 	probability float64
 	probTable   []uint32
 

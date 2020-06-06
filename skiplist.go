@@ -19,7 +19,7 @@ func (s *SkipList) Set(key float64, value interface{}) *Element {
 
 	element = &Element{
 		Node: Node{
-			next: make([]*Element, s.generateRandomHeight()),
+			next: make([]*Element, s.maxHeight),
 		},
 		key:   key,
 		value: value,
@@ -57,7 +57,7 @@ func (s *SkipList) getPrev(key float64) []*Node {
 	var prev *Node = &s.Node
 	var next *Element
 
-	var update = []*Node{}
+	var update = make([]*Node, s.maxHeight)
 
 	for i := s.maxHeight - 1; i >= 0; i-- {
 		next = prev.next[0]
@@ -71,12 +71,12 @@ func (s *SkipList) getPrev(key float64) []*Node {
 }
 
 // generateRandomHeight generate level for new Node
-func (s *SkipList) generateRandomHeight() uint32 {
+func (s *SkipList) generateRandomHeight() int32 {
 	s.rand.Lock()
 	rnd := uint32(s.rand.src.Uint64())
 	s.rand.Unlock()
 
-	h := uint32(1)
+	h := int32(1)
 	for h < s.maxHeight && rnd <= s.probTable[h] {
 		h++
 	}
@@ -85,9 +85,9 @@ func (s *SkipList) generateRandomHeight() uint32 {
 }
 
 // probabilityTable generate table for generate random height
-func probabilityTable(maxHeight uint32, probability float64) (table []uint32) {
+func probabilityTable(maxHeight int32, probability float64) (table []uint32) {
 	p := float64(1.0)
-	for i := uint32(0); i < maxHeight; i++ {
+	for i := int32(0); i < maxHeight; i++ {
 		table = append(table, uint32(float64(math.MaxUint32)*p))
 		p *= probability
 	}
@@ -97,6 +97,7 @@ func probabilityTable(maxHeight uint32, probability float64) (table []uint32) {
 // NewWithDefault return a new empty SkipList
 func NewWithDefault() *SkipList {
 	skl := &SkipList{
+		Node:        Node{next: make([]*Element, defaultMaxHeight)},
 		maxHeight:   defaultMaxHeight,
 		probability: defaultProbability,
 		probTable:   probabilityTable(defaultMaxHeight, defaultProbability),
@@ -106,8 +107,9 @@ func NewWithDefault() *SkipList {
 }
 
 // New return a new empty SkipList
-func New(maxHeight uint32, probability float64) *SkipList {
+func New(maxHeight int32, probability float64) *SkipList {
 	skl := &SkipList{
+		Node:        Node{next: make([]*Element, maxHeight)},
 		maxHeight:   maxHeight,
 		probability: probability,
 		probTable:   probabilityTable(maxHeight, probability),
