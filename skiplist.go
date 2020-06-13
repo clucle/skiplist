@@ -32,6 +32,20 @@ func (s *SkipList) Set(key float64, value interface{}) *Element {
 	return element
 }
 
+// Delete removes Node that matches the key
+func (s *SkipList) Delete(key float64) *Element {
+	update := s.getPrev(key)
+
+	if element := update[0].next[0]; element != nil && element.key == key {
+		for key, value := range element.next {
+			update[key].next[key] = value
+		}
+		return element
+	}
+
+	return nil
+}
+
 // Find get skiplist node when has same key
 func (s *SkipList) Find(key float64) *Element {
 	var prev *Node = &s.Node
