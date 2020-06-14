@@ -52,7 +52,7 @@ func (s *SkipList) Find(key float64) *Element {
 	var next *Element
 
 	for i := s.maxHeight - 1; i >= 0; i-- {
-		next = prev.next[0]
+		next = prev.next[i]
 		for next != nil && key > next.key {
 			prev = &next.Node
 			next = next.next[i]
@@ -74,7 +74,7 @@ func (s *SkipList) getPrev(key float64) []*Node {
 	var update = make([]*Node, s.maxHeight)
 
 	for i := s.maxHeight - 1; i >= 0; i-- {
-		next = prev.next[0]
+		next = prev.next[i]
 		for next != nil && key > next.key {
 			prev = &next.Node
 			next = next.next[i]
