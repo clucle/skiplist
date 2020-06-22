@@ -14,17 +14,17 @@ func TestGenerateLevel(t *testing.T) {
 	fmt.Println(levelDistribution)
 }
 
-func TestSetAndFind(t *testing.T) {
+func TestInsertAndFind(t *testing.T) {
 	s := NewWithDefault()
-	testDataSet := []float64{3, 4}
-	testDataNotSet := []float64{1, 5}
+	testDataInsert := []float64{3, 4}
+	testDataNotInsert := []float64{1, 5}
 
-	for _, key := range testDataSet {
-		s.Set(key, 0)
-		fmt.Printf("%f key set\n", key)
+	for _, key := range testDataInsert {
+		s.Insert(key, 0)
+		fmt.Printf("%f key insert\n", key)
 	}
 
-	for _, key := range testDataSet {
+	for _, key := range testDataInsert {
 		if s.Find(key) == nil {
 			t.Errorf("Can't find added key")
 		} else {
@@ -32,7 +32,7 @@ func TestSetAndFind(t *testing.T) {
 		}
 	}
 
-	for _, key := range testDataNotSet {
+	for _, key := range testDataNotInsert {
 		if s.Find(key) != nil {
 			t.Errorf("Can't find not added key")
 		} else {
@@ -41,16 +41,16 @@ func TestSetAndFind(t *testing.T) {
 	}
 }
 
-func TestSetAndDeleteAndFind(t *testing.T) {
+func TestInsertAndDeleteAndFind(t *testing.T) {
 	s := NewWithDefault()
-	testDataSet := []float64{3, 4, 5}
+	testDataInsert := []float64{3, 4, 5}
 	testDataDelete := []float64{4}
 	testDataExists := []float64{3, 5}
 	testDataNotExists := []float64{4}
 
-	for _, key := range testDataSet {
-		s.Set(key, 0)
-		fmt.Printf("%f key set\n", key)
+	for _, key := range testDataInsert {
+		s.Insert(key, 0)
+		fmt.Printf("%f key insert\n", key)
 	}
 
 	for _, key := range testDataDelete {

@@ -17,6 +17,19 @@ func (s *SkipList) Set(key float64, value interface{}) *Element {
 		return element
 	}
 
+	return nil
+}
+
+// Insert generate the element
+func (s *SkipList) Insert(key float64, value interface{}) *Element {
+	update := s.getPrev(key)
+
+	var element *Element
+
+	if element = update[0].next[0]; element != nil && element.key == key {
+		return nil
+	}
+
 	element = &Element{
 		Node: Node{
 			next: make([]*Element, s.maxHeight),
